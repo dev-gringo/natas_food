@@ -27,19 +27,19 @@ public class NataFoodApp {
         mostrarMenuPrincipal();
     }
 
-    // --- 📝 Registro de Cliente con Validación y Gestión de Errores ---
+    // --- Registro de Cliente con Validación y Gestión de Errores ---
 
     private static Cliente registrarClienteDesdeTeclado() {
         System.out.println("\n---Registro de Nuevo Cliente ---");
 
-        // Asignación automática del ID
+        // Asignación automática del ID (Mejor práctica)
         int id = siguienteIdCliente++;
         System.out.println("ID asignado automáticamente: " + id);
 
         System.out.print("Ingrese Nombre completo: ");
         String nombre = scanner.nextLine();
 
-        // <<-- CAMBIO AQUÍ: Pedir el número de celular -->>
+        // Pedir y validar el número de celular
         String celular = "";
         boolean celularValido = false;
         while (!celularValido) {
@@ -54,17 +54,17 @@ public class NataFoodApp {
             }
         }
 
-        // <<-- CAMBIO AQUÍ: Pedir la dirección -->>
-        System.out.print("Ingrese Dirección de entrega: ");
+        System.out.print("¿direcion, donde enviamos tu pedido?: ");
         String direccion = scanner.nextLine();
 
-        // Se llama al constructor del Cliente con el nuevo campo 'celular'
+        // Se llama al constructor del Cliente con el campo 'celular'
         Cliente nuevoCliente = new Cliente(id, nombre, celular, direccion);
         gestor.registrarCliente(nuevoCliente);
         System.out.println("Cliente " + nombre + " registrado con éxito.");
 
         return nuevoCliente;
     }
+
     // --- Menú Principal ---
 
     private static void mostrarMenuPrincipal() {
@@ -77,10 +77,10 @@ public class NataFoodApp {
             System.out.println("0. Salir");
             System.out.print("Seleccione una opción: ");
 
-            // GESTIÓN DE ERRORES (try-catch-finally) para el menú
+            // GESTIÓN DE ERRORES (try-catch) para el menú
             try {
                 opcion = scanner.nextInt();
-                scanner.nextLine(); // Consumir el salto de línea
+                scanner.nextLine(); // esto es para Consumir el salto de línea
 
                 switch (opcion) {
                     case 1: crearPedido(); break;
@@ -88,12 +88,12 @@ public class NataFoodApp {
                     case 3: realizarPago(); break;
                     case 0: System.out.println("Gracias por usar Nata's Food. ¡Hasta pronto!"); break;
                     default:
-                        System.err.println("Opción no válida. Por favor, intente de nuevo.");
+                        System.err.println("invalido. Por favor, pon una opcion correcta.");
                 }
             } catch (InputMismatchException e) {
                 // Personalización de mensajes de error y evitar detención abrupta
                 System.err.println("Error: Ingrese un número para seleccionar una opción.");
-                scanner.nextLine(); // Limpiar el buffer
+                scanner.nextLine(); // aqui Limpiamos el buffer
                 opcion = -1;
             }
         } while (opcion != 0);
@@ -102,9 +102,9 @@ public class NataFoodApp {
     // --- Lógica de Creación de Pedido ---
 
     private static void crearPedido() {
-        System.out.println("\n--- Nuevo Pedido ---");
+        System.out.println("\n------ Nuevo Pedido ------");
 
-        // Se registra o se selecciona un nuevo cliente antes de crear el pedido
+        // Se registra un nuevo cliente
         Cliente clienteActual = registrarClienteDesdeTeclado();
 
         Pedido nuevoPedido = new Pedido(clienteActual);
@@ -117,7 +117,7 @@ public class NataFoodApp {
         while (agregarMas) {
             System.out.print("Ingrese ID del producto a agregar (0 para terminar): ");
             try {
-                final int idProducto = scanner.nextInt(); // Variable temporal
+                final int idProducto = scanner.nextInt(); // Variable temporal (effectively final)
                 scanner.nextLine();
 
                 if (idProducto == 0) {
@@ -133,7 +133,7 @@ public class NataFoodApp {
 
                 if (productoSeleccionado != null) {
                     nuevoPedido.agregarProducto(productoSeleccionado);
-                    System.out.println("Agregado: " + productoSeleccionado.getNombre());
+                    System.out.println("gregado: " + productoSeleccionado.getNombre());
                 } else {
                     System.err.println("Producto no encontrado. Intente otra vez.");
                 }
@@ -146,7 +146,8 @@ public class NataFoodApp {
 
         if (!nuevoPedido.getProductos().isEmpty()) {
             gestor.agregarPedido(nuevoPedido);
-            System.out.printf("Total a pagar (incl. envío $3.00): $%.2f\n", nuevoPedido.calcularTotal());
+            // Muestra el costo de envío de 2,000
+            System.out.printf("Total a pagar (incl. envío $2,000 COP): $%,.2f\n", nuevoPedido.calcularTotal());
         } else {
             System.out.println("Pedido cancelado: No se agregaron productos.");
         }
@@ -155,7 +156,7 @@ public class NataFoodApp {
     // --- Lógica de Pago (Patrón Strategy) ---
 
     private static void realizarPago() {
-        System.out.println("\n--- Pagar Pedido ---");
+        System.out.println("\n------ Pagar Pedido ------");
 
         if (gestor.getPedidos().isEmpty()) {
             System.out.println("No hay pedidos registrados.");
@@ -173,7 +174,8 @@ public class NataFoodApp {
         }
 
         System.out.println("Pedidos pendientes de pago:");
-        pedidosPendientes.forEach(p -> System.out.println("ID: " + p.getIdPedido() + " | Cliente: " + p.getCliente().getNombre() + " | Total: $" + String.format("%.2f", p.calcularTotal())));
+        // Uso del formato de miles (%,.2f)
+        pedidosPendientes.forEach(p -> System.out.println("ID: " + p.getIdPedido() + " | Cliente: " + p.getCliente().getNombre() + " | Total: $" + String.format("%,.2f", p.calcularTotal())));
 
         Pedido pedidoAPagar = null;
         while(pedidoAPagar == null) {
@@ -199,7 +201,8 @@ public class NataFoodApp {
 
         double total = pedidoAPagar.calcularTotal();
 
-        System.out.println("\nEstrategias de Pago disponibles para Pedido #" + pedidoAPagar.getIdPedido() + " ($" + String.format("%.2f", total) + "):");
+        // Uso del formato de miles (%,.2f)
+        System.out.println("\nEstrategias de Pago disponibles para Pedido #" + pedidoAPagar.getIdPedido() + " ($" + String.format("%,.2f", total) + "):");
         System.out.println("1. Tarjeta de Crédito/Débito");
         System.out.println("2. Efectivo");
         System.out.print("Seleccione un método de pago: ");
@@ -233,12 +236,11 @@ public class NataFoodApp {
     // --- Programación Funcional (Streams y Lambdas) ---
 
     private static void mostrarEstadisticas() {
-        System.out.println("\n--- Estadísticas del Sistema (Uso de Streams) ---");
+        System.out.println("\n--- Estadísticas del Sistema---");
 
         // 1. Filtrar y contar productos caros (Precio > $10,000 COP)
-        // El filtro se ajusta a 10000.00 para reflejar el cambio a pesos colombianos.
         long productosCaros = gestor.getMenu().stream()
-                .filter(p -> p.getPrecio() > 10000.00) // <<-- ¡VALOR CORREGIDO!
+                .filter(p -> p.getPrecio() > 10000.00)
                 .count();
 
         System.out.println("Productos con precio mayor a $10,000 COP: " + productosCaros);
@@ -249,7 +251,8 @@ public class NataFoodApp {
                 .average();
 
         System.out.print("Precio promedio de un artículo del menú: ");
-        promedio.ifPresent(p -> System.out.printf("$%.2f\n", p)); // ifPresent + lambda
+        // Uso del formato de miles (%,.2f)
+        promedio.ifPresent(p -> System.out.printf("$%,.2f\n", p));
 
         // 3. Crear una lista con los nombres de los clientes
         List<String> nombresClientes = gestor.getClientes().stream()

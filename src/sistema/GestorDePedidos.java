@@ -32,15 +32,17 @@ public class GestorDePedidos {
     }
 
     private void inicializarMenu() {
-        // PRECIOS AJUSTADOS PARA PESOS COLOMBIANOS (COP)
-        // (18.50 * 1000 = 18500.00)
         menu.add(new Producto(1, "Hamburguesa Clásica", 18500.00));
-        // (12.00 * 1000 = 12000.00)
         menu.add(new Producto(2, "Pizza Personal", 12000.00));
-        // (2.00 * 1000 = 2000.00)
-        menu.add(new Producto(3, "Gaseosa Coca Cola", 2000.00));
-        // (3.50 * 1000 = 3500.00)
-        menu.add(new Producto(4, "Papas Fritas Grandes", 3500.00));
+        menu.add(new Producto(3, "Gaseosa Coca Cola", 3500.00));
+        menu.add(new Producto(4, "porcion Papas Fritas", 3500.00));
+        menu.add(new Producto(5, "panzerotti",4000));
+        menu.add(new Producto(6,"picada pequeña", 10000));
+        menu.add(new Producto(7,"picada mediana", 15000));
+        menu.add(new Producto(8,"picada pequeña", 22000));
+        menu.add(new Producto(9,"perro caliente especial", 10500));
+        menu.add(new Producto(10,"Alitas de Pollo (6 und)", 15000));
+        menu.add(new Producto(11, "Jugo Natural de Naranja", 4500.00));
     }
 
     // Métodos de gestión

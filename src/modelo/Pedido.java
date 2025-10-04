@@ -9,7 +9,7 @@ public class Pedido {
     private Cliente cliente; // Asociación
     private List<Producto> productos; // Agregación
     private String estado;
-    private double costoEnvio = 2.000;
+    private double costoEnvio = 2000;
 
     public Pedido(Cliente cliente) {
         this.idPedido = contadorPedidos++;
