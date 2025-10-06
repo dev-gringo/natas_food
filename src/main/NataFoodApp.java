@@ -77,7 +77,7 @@ public class NataFoodApp {
             System.out.println("0. Salir");
             System.out.print("Seleccione una opción: ");
 
-            // GESTIÓN DE ERRORES (try-catch) para el menú
+            // GESTIÓN DE ERRORES (try-catch) para el menú*****************************
             try {
                 opcion = scanner.nextInt();
                 scanner.nextLine(); // esto es para Consumir el salto de línea
@@ -163,7 +163,7 @@ public class NataFoodApp {
             return;
         }
 
-        // PROGRAMACIÓN FUNCIONAL (Streams): Filtrar pedidos PENDIENTES
+        // PROGRAMACIÓN FUNCIONAL (Streams): Filtrar pedidos PENDIENTES**********************************
         List<Pedido> pedidosPendientes = gestor.getPedidos().stream()
                 .filter(p -> p.getEstado().equals("PENDIENTE"))
                 .collect(Collectors.toList()); // collect()
@@ -245,7 +245,7 @@ public class NataFoodApp {
 
         System.out.println("Productos con precio mayor a $10,000 COP: " + productosCaros);
 
-        // 2. Calcular el precio promedio del menú
+        // 2. Calcular el precio promedio del menú ***************************************************
         OptionalDouble promedio = gestor.getMenu().stream()
                 .mapToDouble(Producto::getPrecio) // map()
                 .average();
