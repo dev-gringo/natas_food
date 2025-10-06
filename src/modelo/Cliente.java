@@ -1,7 +1,7 @@
 package modelo;
 
 public class Cliente extends Usuario {
-    private String celular; // <<-- CAMBIO: Antes era email
+    private String celular;
     private String direccion;
 
     // Se actualiza el constructor para recibir el celular
